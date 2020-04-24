@@ -27,11 +27,16 @@ for num in range(0, num_char):
   char.append(input_char)
 
 find_words()"""
+def quiz():
+  print("please select your difficulty")
+
 def menu():
   print("welcome to the online word guesser")
   print("you will be letters from the alphabet and you have to see how many words you can make")
   print("if you would like to take part in the quiz press [1]")
   print("if you would like to use the scrabble cheater press [2]")
-  choice = input("please enter [1 or [2] ")
+  choice = int(input("please enter [1 or [2] "))
+  if choice == 1:
+    quiz()
 
 menu()
