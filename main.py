@@ -10,26 +10,22 @@ for line in my_file:
 
 my_file.close()
 
-"""def find_words(num_char):
-    potentials = []
-    char = []
-    for list in list_of_lists:
-        if len(list[0]) <= num_char:
-            potentials.append(list)
 
-    for item in potentials:
-        for letter in len(item[0]):
-            if letter == char[0] and letter == char[1] and letter == char[3]:
+def find_words(char):
+    print(char)
+    for item in list_of_lists:
+        for letter in item[0]:
+            if letter == char[0]:
                 print(item)
 
 
 def scrabble_cheater():
+    asset = []
     num_char = int(input("please enter how many letters you have available to use "))
-
     for num in range(0, num_char):
         input_char = input("please enter one of the characters you have available to use ")
-        char.append(input_char)
-    find_words()"""
+        asset.append(input_char)
+    find_words(asset)
 
 
 def gen_letters():
@@ -53,22 +49,26 @@ def quiz_main():
         quiz_main()
 
 
-
 def guessing(rand_letters):
     corr_total = 0
     corr_list = []
+    guessed = []
     guess = input("please press enter to begin guessing ")
     while guess != "f":
         print()
         print(rand_letters)
         guess = input(
             "please enter you guess and press enter or if you are finished guessing press [f] ").lower().strip()
+        guessed.append(guess)
         for item in list_of_lists:
             if guess == item[0] and guess != "f":
-                corr_total += 1
+                letters = list(guess)
+                find_words(letters)
+                corr_total += len(item[0])
                 corr_list.append(item)
                 print("congratulations that was correct ")
-                print("{} {} ".format("your total correct guesses are ", corr_total))
+                print("{} {} ".format("The total amount of points you have is", corr_total))
+        print("{} {}".format("the words you previously guessed were", guessed))
     print()
     return corr_total, corr_list
 
@@ -86,7 +86,6 @@ def main():
         quiz_main()
     elif choice == 2:
         print("CHEATER")
-
 
 
 main()
