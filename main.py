@@ -35,19 +35,23 @@ def scrabble_cheater():
 def gen_letters():
     letters_string = string.ascii_lowercase
     letters = list(letters_string)
-    charecters = random.choices(letters,
-                                weights=[5, 1, 1, 1, 5, 1, 1, 1, 5, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 1, 5, 1, 1, 1,
-                                         1, 1], k=5)
-    return charecters
+    characters = random.choices(letters,
+                                weights=[2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1,
+                                         1, 1], k=10)
+    return characters
 
 
 def quiz_main():
     print()
-    print("Thankyou for choosing to partake in the quiz the rules are as follows")
-    gen_letters()
+    print("Thank you for choosing to partake in the quiz the rules are as follows")
     rand_letters = gen_letters()
     print("{} {}".format("the letters you have available to use are ", rand_letters))
-    guessing(rand_letters)
+    total, correct = guessing(rand_letters)
+    print("{} {}".format("your total score was", total))
+    play_again = input("would you like to play again [y]yes or [n]no ")
+    if play_again == "y":
+        quiz_main()
+
 
 
 def guessing(rand_letters):
@@ -60,11 +64,14 @@ def guessing(rand_letters):
         guess = input(
             "please enter you guess and press enter or if you are finished guessing press [f] ").lower().strip()
         for item in list_of_lists:
-            if guess == item[0]:
+            if guess == item[0] and guess != "f":
                 corr_total += 1
                 corr_list.append(item)
-                print(corr_total)
-    quiz_main()
+                print("congratulations that was correct ")
+                print("{} {} ".format("your total correct guesses are ", corr_total))
+    print()
+    return corr_total, corr_list
+
 
 def main():
     print("welcome to the online word guesser")
@@ -77,6 +84,9 @@ def main():
     choice = int(input("please enter [1 or [2] "))
     if choice == 1:
         quiz_main()
+    elif choice == 2:
+        print("CHEATER")
+
 
 
 main()
