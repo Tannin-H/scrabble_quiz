@@ -1,7 +1,7 @@
 import random
 import string
 import pickle
-from itertools import permutations
+
 
 list_of_lists = []
 my_file = open("words", "r")
@@ -10,6 +10,21 @@ for line in my_file:
     line_list = stripped_line.split()
     list_of_lists.append(line_list)
 my_file.close()
+
+def check_int(txt):
+    while True:
+        try:
+            num = int(input(txt))
+            return num
+        except ValueError:
+            print("please enter an integer")
+
+
+def check_y_or_n(answer):
+    while answer != "y" and answer != "yes" and answer != "n" and answer != "no":
+        answer = input(answer)
+    return answer
+
 
 
 def find_words(char):
@@ -31,16 +46,25 @@ def find_words(char):
         used.clear()
         check = 0
     return possibles
-    print(possibles)
 
 
 def scrabble_cheater():
-    asset = []
-    num_char = int(input("please enter how many letters you have available to use "))
-    for num in range(0, num_char):
-        input_char = input("please enter one of the characters you have available to use ")
-        asset.append(input_char)
-    find_words(asset)
+    print()
+    print("Welcome to the scrabble word finder this  will generate all of the possible words from your letters"
+          "you have provided and display them from largest to smallest")
+    input_char = input("Please enter all of the available characters ").lower().strip()
+    asset = list(input_char)
+    print(asset)
+    gen_words = find_words(asset)
+    print("all of the possible solutions are")
+    gen_words.sort(key=len)
+    for word in gen_words:
+        print(word)
+    gen_more = check_y_or_n("would you like to generate more words [y]es or [n]o? ")
+    if gen_more == "y":
+        scrabble_cheater()
+    else:
+        main()
 
 
 def gen_letters():
@@ -62,12 +86,24 @@ def quiz_main():
     print(answers)
     print()
     print("Thank you for choosing to partake in the quiz the rules are as follows")
-    print("{} {}".format("the letters you have available to use are ", rand_letters))
+    print("Only the correct spelling will be accepted")
+    print("There are no 1 letter words")
+    print("Each letter can only be used once and each word used once")
+    print("Finally your score is determined by the accumulation of the lengths of words you spell")
+    print()
     total, correct = guessing(rand_letters, answers)
     print("{} {}".format("your total score was", total))
-    play_again = input("would you like to play again [y]yes or [n]no ")
+    print("The other possible combinations are")
+    answers.sort(key=len)
+    for word in answers:
+        print("{} {} {}".format("score", len(word), word))
+    play_again = check_y_or_n("would you like to play again [y]yes or [n]no ")
     if play_again == "y":
+        print()
         quiz_main()
+    else:
+        print()
+        main()
 
 
 def guessing(rand_letters, answers):
@@ -78,7 +114,7 @@ def guessing(rand_letters, answers):
     guess = input("please press enter to begin guessing ")
     while guess != "f":
         print()
-        print(rand_letters)
+        print("{} {}".format("the letters you have available to use are ", rand_letters))
         guess = input(
             "please enter you guess and press enter or if you are finished guessing press [f] ").lower().strip()
         guessed.append(guess)
@@ -90,7 +126,7 @@ def guessing(rand_letters, answers):
                 print("congratulations that was correct ")
                 print("{} {} ".format("The total amount of points you have is", corr_total))
                 correct = True
-        if correct == False:
+        if not correct:
             print("sorry that guess was incorrect please try again")
         correct = False
         print("{} {}".format("the words you have previously guessed are", guessed))
@@ -99,18 +135,24 @@ def guessing(rand_letters, answers):
 
 
 def main():
-    print("welcome to the online word guesser")
+    print()
+    print("welcome to the online word guesser quiz")
     print("you will be given random letters from the alphabet and the goal is to see how many combinations of words "
           "you are able "
           "make")
-
     print("if you would like to take part in the quiz press [1]")
     print("if you would like to use the scrabble cheater press [2]")
-    choice = int(input("please enter [1 or [2] "))
-    if choice == 1:
-        quiz_main()
-    elif choice == 2:
-        print("CHEATER")
+    print("If you would like to exit please press 3")
+    choice = check_int("please enter [1, [2] or [3] ")
+    while choice != 1 or choice != 2:
+        if choice == 1:
+            quiz_main()
+        elif choice == 2:
+            scrabble_cheater()
+        elif choice == 3:
+            exit()
+        else:
+            choice = check_int("please enter [1 or [2] ")
 
 
 main()
