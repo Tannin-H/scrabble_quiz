@@ -1,6 +1,7 @@
 import random
 import string
 import pickle
+import collections
 
 
 list_of_lists = []
@@ -10,6 +11,7 @@ for line in my_file:
     line_list = stripped_line.split()
     list_of_lists.append(line_list)
 my_file.close()
+
 
 def check_int(txt):
     while True:
@@ -34,13 +36,15 @@ def find_words(char):
     for item in list_of_lists:
         for letter in item[0]:
             if letter in used:
+                if char.count(letter) > 1:
+                    check += 1
+                    break
                 check = 0
             if letter in char:
                 check += 1
                 used.append(letter)
         if check == len(item[0]):
             possibles.append(item[0])
-            check = 0
             used.clear()
 
         used.clear()
@@ -83,7 +87,7 @@ def gen_letters():
 def quiz_main():
     rand_letters = gen_letters()
     answers = find_words(rand_letters)
-    print(answers)
+    #print(answers)
     print()
     print("Thank you for choosing to partake in the quiz the rules are as follows")
     print("Only the correct spelling will be accepted")
@@ -152,7 +156,7 @@ def main():
         elif choice == 3:
             exit()
         else:
-            choice = check_int("please enter [1 or [2] ")
+            choice = check_int("please enter [1, [2] or 3 ")
 
 
 main()
