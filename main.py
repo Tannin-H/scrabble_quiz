@@ -1,19 +1,16 @@
 import random
 import string
 import pickle
-import collections
 
+"""opens the file containing words as a list and assigns it to a variable"""
+pickle_in = open("words_list", "rb")
+list_of_lists = pickle.load(pickle_in)
 
-list_of_lists = []
-my_file = open("words", "r")
-for line in my_file:
-    stripped_line = line.strip()
-    line_list = stripped_line.split()
-    list_of_lists.append(line_list)
-my_file.close()
+pickle_in.close()
 
 
 def check_int(txt):
+    """Takes in the parameter txt which displays the question and then validates the user input using try except"""
     while True:
         try:
             num = int(input(txt))
@@ -23,20 +20,22 @@ def check_int(txt):
 
 
 def check_y_or_n(answer):
+    """Uses the parameter answer to determine if the user input is yes, y, no or n"""
     while answer != "y" and answer != "yes" and answer != "n" and answer != "no":
-        answer = input(answer)
+        answer = input(answer).strip().lower()
     return answer
 
 
-
 def find_words(char):
+    """function used to generate all of the possible words from the given players given letters(char)
+    and return them as a list(possibles)"""
     possibles = []
     used = []
     check = 0
     for item in list_of_lists:
         for letter in item[0]:
             if letter in used:
-                if char.count(letter) > 1:
+                if char.count(letter) == item[0].count(letter):
                     check += 1
                     break
                 check = 0
@@ -53,14 +52,16 @@ def find_words(char):
 
 
 def scrabble_cheater():
+    """The main body of the scrabble cheater responsible for displaying instruction
+    asking for user input and displaying  the possible solutions"""
     print()
-    print("Welcome to the scrabble word finder this  will generate all of the possible words from your letters"
-          "you have provided and display them from largest to smallest")
+    print("Welcome to the scrabble word finder this will generate all of the possible words from your scarbble rack "
+          "then display them from largest to smallest")
     input_char = input("Please enter all of the available characters ").lower().strip()
     asset = list(input_char)
     print(asset)
     gen_words = find_words(asset)
-    print("all of the possible solutions are")
+    print("The possible solutions are")
     gen_words.sort(key=len)
     for word in gen_words:
         print(word)
@@ -72,6 +73,8 @@ def scrabble_cheater():
 
 
 def gen_letters():
+    """Generates random letters of the alphabet with added weight placed on the vowels and
+    if statement to check if a vowel needs to be added"""
     letters_string = string.ascii_lowercase
     letters = list(letters_string)
     characters = random.choices(letters,
@@ -80,20 +83,24 @@ def gen_letters():
     if "a" not in characters and "e" not in characters and "i" not in characters and "o" not in characters and "u" not in characters:
         characters.remove(characters[0])
         characters.append("a")
-        print("added")
     return characters
 
 
 def quiz_main():
+    """Main routine of the quiz responsible for displaying instructions showing the final score
+    and asking if the player would like to play again"""
     rand_letters = gen_letters()
     answers = find_words(rand_letters)
-    #print(answers)
+    print("definitely not the answers", answers)
     print()
     print("Thank you for choosing to partake in the quiz the rules are as follows")
     print("Only the correct spelling will be accepted")
     print("There are no 1 letter words")
-    print("Each letter can only be used once and each word used once")
-    print("Finally your score is determined by the accumulation of the lengths of words you spell")
+    print("Each letter can only be used as many times as it appears oin your list of words "
+          " and each word entered once")
+    print("Finally your score is determined by the accumulation of the lengths of words you spell, "
+          "for example the word warm would be worth 4 points")
+    print("You have as long as you want to obtain the highest score you can when you are finished guessing press [F]")
     print()
     total, correct = guessing(rand_letters, answers)
     print("{} {}".format("your total score was", total))
@@ -111,19 +118,21 @@ def quiz_main():
 
 
 def guessing(rand_letters, answers):
+    """Routine that handles of the of guessing from the player and
+    checking if the guess is correct, displaying the available letters and giving and
+    indication of if the player was correct """
     corr_total = 0
     corr_list = []
     guessed = []
     correct = False
     guess = input("please press enter to begin guessing ")
     while guess != "f":
-        print()
         print("{} {}".format("the letters you have available to use are ", rand_letters))
         guess = input(
             "please enter you guess and press enter or if you are finished guessing press [f] ").lower().strip()
-        guessed.append(guess)
         for item in answers:
             if guess == item and guess != "f":
+                guessed.append(guess)
                 answers.remove(item)
                 corr_total += len(item)
                 corr_list.append(item)
@@ -133,17 +142,16 @@ def guessing(rand_letters, answers):
         if not correct:
             print("sorry that guess was incorrect please try again")
         correct = False
-        print("{} {}".format("the words you have previously guessed are", guessed))
+        print()
+        print("{} {}".format("You have previously guessed", guessed))
     print()
     return corr_total, corr_list
 
 
 def main():
+    """Main menu that allows the user to select from 3 different options by calling the respective functions"""
     print()
-    print("welcome to the online word guesser quiz")
-    print("you will be given random letters from the alphabet and the goal is to see how many combinations of words "
-          "you are able "
-          "make")
+    print("welcome to the online word guesser:")
     print("if you would like to take part in the quiz press [1]")
     print("if you would like to use the scrabble cheater press [2]")
     print("If you would like to exit please press 3")
